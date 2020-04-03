@@ -15,7 +15,7 @@
 
 RCT_EXPORT_MODULE()
 
-- (dispatch_queue_t)methodQueue
+-(dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
 }
@@ -24,11 +24,18 @@ RCT_EXPORT_METHOD(getIDFA:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     if([[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled]) {
-        NSUUID *IDFA = [[ASIdentifierManager sharedManager] advertisingIdentifier];
-        resolve([IDFA UUIDString]);
+        NSUUID *idfa = [ASIdentifierManager.sharedManager advertisingIdentifier];
+        resolve([idfa UUIDString]);
     } else {
         resolve(@"");
     }
+}
+
+RCT_EXPORT_METHOD(getIDFV:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    NSUUID *idfv = [UIDevice.currentDevice identifierForVendor];
+    resolve([idfv UUIDString]);
 }
 
 @end
